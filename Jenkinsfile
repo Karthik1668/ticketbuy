@@ -1,29 +1,34 @@
-pipeline {
+ipeline {
     agent any
 
     tools {
-        maven 'Maven3' // Make sure Maven3 is set up in Jenkins Global Tools
-        jdk 'Java17'   // Replace with the JDK name you configured
+        maven 'Maven 3.9.6'
+        jdk 'Java 17'
+    }
+
+    environment {
+        PROJECT_DIR = 'ticketbuy'
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/Karthik1668/ticketbuy.git'
+                git branch: 'ticketbuy',
+                    url: 'https://github.com/Karthik1668/ticketbuy.git'
             }
         }
 
         stage('Build') {
             steps {
-                dir('ticketbuy') {
-                    sh 'mvn clean install'
+                dir("${env.PROJECT_DIR}") {
+                    sh 'mvn clean package'
                 }
             }
         }
 
         stage('Test') {
             steps {
-                dir('ticketbuy') {
+                dir("${env.PROJECT_DIR}") {
                     sh 'mvn test'
                 }
             }
