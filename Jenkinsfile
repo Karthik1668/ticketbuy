@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/Karthik1668/ticketbuy.git'
+                git branch: 'ticketbuy', url: 'https://github.com/Karthik1668/ticketbuy.git'
             }
         }
 
