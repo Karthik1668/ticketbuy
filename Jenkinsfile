@@ -9,19 +9,23 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'ticketbuy', url: 'https://github.com/Karthik1668/ticketbuy.git'
+                git 'https://github.com/Karthik1668/ticketbuy.git'
             }
         }
 
         stage('Build') {
             steps {
-                sh 'mvn clean install'
+                dir('ticketbuy') {
+                    sh 'mvn clean install'
+                }
             }
         }
 
         stage('Test') {
             steps {
-                sh 'mvn test'
+                dir('ticketbuy') {
+                    sh 'mvn test'
+                }
             }
         }
     }
