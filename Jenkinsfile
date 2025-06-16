@@ -1,37 +1,63 @@
 pipeline {
+
     agent any
 
+
+
     tools {
-        maven 'Maven 3.9.6'
-        jdk 'Java 17'
+
+        maven 'Maven3'   // matches the Maven tool you installed
+
+        jdk    'Java17'  // matches the JDK tool you installed
+
     }
 
-    environment {
-        PROJECT_DIR = 'ticketbuy'
-    }
+
 
     stages {
+
         stage('Checkout') {
+
             steps {
-                git branch: 'ticketbuy',
-                    url: 'https://github.com/Karthik1668/ticketbuy.git'
+
+                git branch: 'ticketbuy', url: 'https://github.com/Karthik1668/ticketbuy.git'
+
             }
+
         }
+
+
 
         stage('Build') {
+
             steps {
-                dir("${env.PROJECT_DIR}") {
-                    sh 'mvn clean package'
+
+                dir('ticketbuy') {
+
+                    sh 'mvn clean install'
+
                 }
+
             }
+
         }
 
+
+
         stage('Test') {
+
             steps {
-                dir("${env.PROJECT_DIR}") {
+
+                dir('ticketbuy') {
+
                     sh 'mvn test'
+
                 }
+
             }
+
         }
+
     }
+
 }
