@@ -1,63 +1,41 @@
 pipeline {
-
     agent any
 
-
-
     tools {
-
-        maven 'Maven3'   // matches the Maven tool you installed
-
-        jdk    'Java17'  // matches the JDK tool you installed
-
+        maven 'Maven 3.9.6'  // Use the name of Maven tool configured in Jenkins
+        jdk 'Java 17'        // Use the name of JDK configured in Jenkins
     }
-
-
 
     stages {
-
-        stage('Checkout') {
-
+        stage('Clone Repository') {
             steps {
-
-                git branch: 'ticketbuy', url: 'https://github.com/Karthik1668/ticketbuy.git'
-
+                git 'https://github.com/Karthik1668/ticketbuy.git'
             }
-
         }
 
-
-
-        stage('Build') {
-
+        stage('Build with Maven') {
             steps {
-
-                dir('ticketbuy') {
-
-                    sh 'mvn clean install'
-
-                }
-
+                sh 'mvn clean package'
             }
-
         }
 
-
-
-        stage('Test') {
-
+        stage('Build Docker Image') {
             steps {
-
-                dir('ticketbuy') {
-
-                    sh 'mvn test'
-
-                }
-
+                sh 'docker build -t ticketbuy-app .'
             }
-
         }
 
+        stage('Stop Previous Container') {
+            steps {
+                sh 'docker stop ticketbuy-container || true'
+                sh 'docker rm ticketbuy-container || true'
+            }
+        }
+
+        stage('Run Docker Container') {
+            steps {
+                sh 'docker run -d -p 8081:8080 --name ticketbuy-container ticketbuy-app'
+            }
+        }
     }
-
 }
